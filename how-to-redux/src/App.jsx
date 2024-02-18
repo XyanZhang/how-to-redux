@@ -1,38 +1,54 @@
-import React, {useState, useContext} from 'react'
+import React from 'react'
+import {appContext, store, connect } from './redux.jsx'
 import './App.css'
 
-const appContext = React.createContext(null)
 const App = () => {
-  const [appState, setAppState] = useState({
-    user: {name: 'frank', age: 18}
-  })
-  const contextValue = {appState, setAppState}
   return (
-    <appContext.Provider value={contextValue}>
+    <appContext.Provider value={store}>
       <大儿子/>
       <二儿子/>
       <幺儿子/>
     </appContext.Provider>
   )
 }
-const 大儿子 = () => <section>大儿子<User/></section>
-const 二儿子 = () => <section>二儿子<UserModifier/></section>
-const 幺儿子 = () => <section>幺儿子</section>
-const User = () => {
-  const contextValue = useContext(appContext)
-  return <div>User:{contextValue.appState.user.name}</div>
-
+const 大儿子 = () => {
+  console.log('大儿子执行了 ' + Math.random())
+  return (
+    <section>大儿子<User/></section>
+  )
 }
-const UserModifier = () => {
-  const {appState, setAppState} = useContext(appContext)
+const 二儿子 = () => {
+  console.log('二儿子执行了 ' + Math.random())
+  return (
+    <section>二儿子<UserModifier/></section>
+  )
+}
+const 幺儿子 = () => {
+  console.log('幺儿子执行了 ' + Math.random())
+  return (
+    <section>幺儿子</section>
+  )
+}
+const User = connect(({state}) => {
+  console.log('User执行了 ' + Math.random())
+  return <div>User:{state.user.name}</div>
+})
+const UserModifier = connect(({state, dispatch}) => {
+  console.log('UserModifier执行了 ' + Math.random())
   const onChange = (e) => {
-    appState.user.name = e.target.value
-    setAppState({...appState})
+    let name = e.target.value;
+    // 更新
+    dispatch({
+      type: 'updateUser',
+      payload: {
+        name
+      }
+    })
   }
   return <div>
-    <input value={appState.user.name}
+    <input value={state.user.name}
       onChange={onChange}/>
   </div>
-}
+})
 
 export default App
