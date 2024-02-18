@@ -33,7 +33,7 @@ const User = connect(({state}) => {
   console.log('User执行了 ' + Math.random())
   return <div>User:{state.user.name}</div>
 })
-const UserModifier = connect(({state, dispatch}) => {
+const UserModifier = connect(({state, dispatch, children}) => {
   console.log('UserModifier执行了 ' + Math.random())
   const onChange = (e) => {
     let name = e.target.value;
@@ -46,6 +46,7 @@ const UserModifier = connect(({state, dispatch}) => {
     })
   }
   return <div>
+    {children}
     <input value={state.user.name}
       onChange={onChange}/>
   </div>

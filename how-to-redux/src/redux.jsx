@@ -5,7 +5,6 @@ export const store = {
     user: {name: 'kenanyah', age: 26}
   },
   setState(newState) {
-    console.log(newState)
     store.state = newState
     // 视图更新
     store.listeners.map(fn => fn(store.state))
@@ -19,7 +18,6 @@ export const store = {
     }
   }
 }
-export const appContext = createContext(null)
 
 // 根据不同的action类型来处理状态的更新逻辑
 // 每个Reducer都只处理自己所负责的一部分状态
@@ -46,6 +44,7 @@ export const connect = (Component) => {
     }
     const { state, setState} = context;
 
+    // connect 的时候订阅，使得在 store state改变的时候，进行视图更新
     const [, update] = useState({})
     useEffect(() => {
       // 订阅
@@ -61,3 +60,5 @@ export const connect = (Component) => {
     return <Component {...props} dispatch={dispatch} state={state}/>
   }
 }
+
+export const appContext = createContext(null)
